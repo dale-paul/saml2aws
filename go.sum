@@ -28,6 +28,8 @@ github.com/aws/aws-sdk-go v1.44.271 h1:aa+Nu2JcnFmW1TLIz/67SS7KPq1I1Adl4RmExSMjG
 github.com/aws/aws-sdk-go v1.44.271/go.mod h1:aVsgQcEevwlmQ7qHE9I3h+dtQgpqhFB+i8Phjh7fkwI=
 github.com/bearsh/hid v1.3.0 h1:GLNa8hvEzJxzQEEpheDUr2SivvH7iwTrJrDhFKutfX8=
 github.com/bearsh/hid v1.3.0/go.mod h1:KbQByg8WfPr92v7aaKAHTtZUEVG7e2XRpcF8+TopQv8=
+github.com/bearsh/hid v1.5.0 h1:8ChLlc9Nqmlrla4U0QMHLhb/h1hnVcs2Unjoz7iY+vk=
+github.com/bearsh/hid v1.5.0/go.mod h1:cs47JobsdK/AHOpD4wgX80i0el+2r/PjZkxrpaJxR84=
 github.com/beevik/etree v1.2.0 h1:l7WETslUG/T+xOPs47dtd6jov2Ii/8/OjCldk5fYfQw=
 github.com/beevik/etree v1.2.0/go.mod h1:aiPf89g/1k3AShMVAzriilpcE4R/Vuor90y83zVZWFc=
 github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973/go.mod h1:Dwedo/Wpr24TaqPxmxbtue+5NUziq4I4S80YR8gNf3Q=
@@ -100,6 +102,8 @@ github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 h1:Z9n2FFNU
 github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51/go.mod h1:CzGEWj7cYgsdH8dAjBGEr58BoE7ScuLd+fwFZ44+/x8=
 github.com/keybase/go-keychain v0.0.0-20211119201326-e02f34051621 h1:aMQ7pA4f06yOVXSulygyGvy4xA94fyzjUGs0iqQdMOI=
 github.com/keybase/go-keychain v0.0.0-20211119201326-e02f34051621/go.mod h1:enrU/ug069Om7vWxuFE6nikLI2BZNwevMiGSo43Kt5w=
+github.com/keybase/go-keychain v0.0.0-20230523030712-b5615109f100 h1:rG3VnJUnAWyiv7qYmmdOdSapzz6HM+zb9/uRFr0T5EM=
+github.com/keybase/go-keychain v0.0.0-20230523030712-b5615109f100/go.mod h1:qDHUvIjGZJUtdPtuP4WMu5/U4aVWbFw1MhlkJqCGmCQ=
 github.com/kisielk/errcheck v1.1.0/go.mod h1:EZBBE59ingxPouuu3KfxchcWSUPOHkagtvWXihfKN4Q=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=

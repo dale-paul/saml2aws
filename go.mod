@@ -14,7 +14,7 @@ require (
 	github.com/danieljoos/wincred v1.2.0
 	github.com/google/uuid v1.3.0
 	github.com/h2non/gock v1.2.0
-	github.com/keybase/go-keychain v0.0.0-20211119201326-e02f34051621
+	github.com/keybase/go-keychain v0.0.0-20230523030712-b5615109f100
 	github.com/marshallbrekka/go-u2fhost v0.0.0-20210111072507-3ccdec8c8105
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/errors v0.9.1
@@ -32,7 +32,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
-	github.com/bearsh/hid v1.3.0 // indirect
+	github.com/bearsh/hid v1.5.0 // indirect
 	github.com/danwakefield/fnmatch v0.0.0-20160403171240-cbb64ac3d964 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dvsekhvalnov/jose2go v1.5.0 // indirect
