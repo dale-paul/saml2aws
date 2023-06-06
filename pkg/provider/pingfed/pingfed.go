@@ -109,6 +109,12 @@ func (ac *Client) follow(ctx context.Context, req *http.Request) (string, error)
 	} else if docIsWebAuthn(doc) {
 		logger.WithField("type", "webauthn").Debug("doc detect")
 		handler = ac.handleWebAuthn
+	} else if docIsFormSelectDevice(doc) {
+		logger.WithField("type", "select-device").Debug("doc detect")
+		handler = ac.handleFormSelectDevice
+	} else if docIsPPMSelfRedirect(doc) {
+		logger.WithField("type","redirect").Debug("doc detect")
+		handler = ac.handleFormRedirect
 	} else if docIsRefresh(doc) {
 		logger.WithField("type", "refresh").Debug("doc detect")
 		handler = ac.handleRefresh
@@ -141,7 +147,7 @@ func (ac *Client) handleLogin(ctx context.Context, doc *goquery.Document, _ *url
 	form.Values.Set("pf.pass", loginDetails.Password)
 	form.Values.Set("USER", loginDetails.Username)
 	form.Values.Set("PASSWORD", loginDetails.Password)
-	form.URL = makeAbsoluteURL(form.URL, loginDetails.URL)
+	form.URL,_ = makeAbsoluteURL(form.URL, loginDetails.URL)
 
 	req, err := form.BuildRequest()
 	return ctx, req, err
@@ -249,6 +255,48 @@ func (ac *Client) handleWebAuthn(ctx context.Context, doc *goquery.Document, _ *
 	return ctx, req, err
 }
 
+func (ac *Client) handleFormSelectDevice(ctx context.Context, doc *goquery.Document, url *url.URL) (context.Context, *http.Request, error) {
+	// var deviceMap = findDeviceMap(doc)
+	// deviceNameList := make([]string, len(deviceMap))
+	// i := 0
+	// for key := range deviceMap {
+	// 	deviceNameList[i] = key
+	// 	i++
+	// }
+	// var chooseDevice = prompter.Choose("Select which MFA Device to use", deviceNameList)
+
+	form, err := page.NewFormFromDocument(doc, "")
+	if err != nil {
+		return ctx, nil, errors.Wrap(err, "error extracting select device form")
+	}
+
+	// form.Values.Set("deviceId", deviceMap[deviceNameList[chooseDevice]])
+	form.URL, err = makeAbsoluteURL(form.URL, makeBaseURL(url))
+	if err != nil {
+		return ctx, nil, err
+	}
+
+	logger.WithField("value", form.Values.Encode()).Debug("Select Device")
+	req, err := form.BuildRequest()
+	return ctx, req, err
+}
+
+func findDeviceMap(doc *goquery.Document) map[string]string {
+	deviceList := make(map[string]string)
+
+	doc.Find("ul.device-list > li").Each(func(_ int, s *goquery.Selection) {
+		deviceId, _ := s.Attr("data-id")
+		deviceName, _ := s.Find("a > div.device-name").Html()
+		if deviceName == "" {
+			deviceName, _ = s.Find("button > div.device-name").Html()
+		}
+
+		logger.WithField("device name", deviceName).WithField("device id", deviceId).Debug("Select Device")
+		deviceList[deviceName] = deviceId
+	})
+	return deviceList
+}
+
 func docIsLogin(doc *goquery.Document) bool {
 	return doc.Has("input[name=\"pf.pass\"]").Size() == 1 || doc.Has("input[name=\"PASSWORD\"]").Size() == 1
 }
@@ -293,14 +341,35 @@ func docIsRefresh(doc *goquery.Document) bool {
 	return doc.Has("meta[http-equiv=\"refresh\"]").Size() == 1
 }
 
+func docIsFormSelectDevice(doc *goquery.Document) bool {
+	return doc.Has("form[name=\"device-form\"]").Size() == 1
+}
+
+func docIsPPMSelfRedirect(doc *goquery.Document) bool {
+	return doc.Has("form#form1").Size() == 1 && doc.Has("input#csrfToken").Size() == 1
+}
+
 func extractSAMLResponse(doc *goquery.Document) (v string, ok bool) {
 	return doc.Find("input[name=\"SAMLResponse\"]").Attr("value")
 }
 
+func makeBaseURL(url *url.URL) string {
+	return url.Scheme + "://" + url.Hostname()
+}
+
 // ensures given url is an absolute URL. if not, it will be combined with the base URL
-func makeAbsoluteURL(v string, base string) string {
-	if u, err := url.ParseRequestURI(v); err == nil && !u.IsAbs() {
-		return fmt.Sprintf("%s%s", base, v)
+func makeAbsoluteURL(v string, base string) (string, error) {
+	logger.WithField("base", base).WithField("v", v).Debug("make absolute url")
+	baseURL, err := url.Parse(base)
+	if err != nil {
+		return "", err
 	}
-	return v
+	pathURL, err := url.ParseRequestURI(v)
+	if err != nil {
+		return "", err
+	}
+	if pathURL.IsAbs() {
+		return pathURL.String(), nil
+	}
+	return baseURL.ResolveReference(pathURL).String(), nil
 }
